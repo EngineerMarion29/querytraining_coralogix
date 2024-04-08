@@ -1,0 +1,57 @@
+(1) How many logs contain the value “PUT” in the method field? 
+*Logs tab query:*
+user_action.method: "PUT"
+
+*Via Elastic/Opensearch API*
+curl -X GET 'https://coralogix-esapi.coralogix.com:9443/*:51444_newlogs*/_search' -H 'token: cxup_QuFXVI7MJXzXnTXtTa0UwIx85xGp60' -H "Content-type: application/json" -d '{
+  "query": {
+      "bool": {
+          "filter":[{
+              "query_string": {
+                  "query": "user_action.method:PUT"
+              }
+           },
+              {
+          "range": {
+              "coralogix.timestamp": {
+                  "gte": "2024-04-07T00:00:00",
+                  "time_zone": "+08:00"
+              }
+          }
+              }
+          ]
+      }
+  }
+}'
+#Documentation: https://coralogix.com/docs/opensearch-api/
+
+
+*Via Direct Archive Query HTTP API [lucene]*
+
+curl --location -X POST 'https://ng-api-http.coralogix.com/api/v1/dataprime/query' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer cxup_QuFXVI7MJXzXnTXtTa0UwIx85xGp60' \
+--data '{
+  "query": "user_action.method:PUT",
+  "metadata": {
+    "syntax": "QUERY_SYNTAX_LUCENE",
+    "startDate": "2024-04-07T00:20:00.00Z",
+    "endDate": "2024-04-08T20:30:00.00Z"
+  }
+}'
+
+*Via Direct Archive Query HTTP API [data prime]*
+
+curl --location -X POST 'https://ng-api-http.coralogix.com/api/v1/dataprime/query' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer cxup_QuFXVI7MJXzXnTXtTa0UwIx85xGp60' \
+--data '{
+  "query": "source logs | filter user_action.method == '\''PUT'\''",
+  "metadata": {
+    "tier": "TIER_FREQUENT_SEARCH",
+    "syntax": "QUERY_SYNTAX_DATAPRIME",
+    "startDate": "2024-04-07T00:20:00.00Z",
+    "endDate": "2024-04-08T20:30:00.00Z",
+    "defaultSource": "logs"
+  }
+}'
