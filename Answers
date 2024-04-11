@@ -55,3 +55,6 @@ curl --location -X POST 'https://ng-api-http.coralogix.com/api/v1/dataprime/quer
     "defaultSource": "logs"
   }
 }'
+
+
+#MORE NOTES: https://docs.google.com/document/d/1tXAK4egObz-aMhzDChgM0ieHtuH2owuErVKJGq9fGoY/edit
